@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="TopK Language Models (TopK LM) are a novel approach to language modeling that integrates TopK activation functions into transformer architectures, enabling interpretable and steerable representations while maintaining model performance.">
+  <meta name="keywords" content="TopK Language Models, TopKLM, TopK LM, TopK-LM, topklm, topk lm, topk-lm">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TopKLM</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  
+  <!-- BibTeX Syntax Highlighting Styles -->
+  <style>
+    /* BibTeX syntax highlighting */
+    .bibtex-entry-type {
+      color: #F84E4E;
+      font-weight: bold;
+    }
+
+    .bibtex-id {
+      color: #000000;
+      font-weight: normal;
+    }
+
+    .bibtex-field-name {
+      color: #008EA7;
+      font-weight: bold;
+    }
+
+    .bibtex-field-value {
+      color: #FA8D50;
+    }
+
+    .bibtex-braces {
+      color: #666;
+    }
+
+    .bibtex-equals {
+      color: #666;
+    }
+
+    .bibtex-comma {
+      color: #666;
+    }
+
+    /* Enhanced BibTeX container styling */
+    .bibtex-container {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 10px 30px;
+      margin: 20px auto 0;
+      position: relative;
+      text-align: left;
+    }
+
+    /* Copy button styling */
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .copy-button:hover {
+      background: #0056b3;
+    }
+
+    .copy-button.copied {
+      background: #28a745;
+    }
+
+    .copy-button.copied:hover {
+      background: #28a745;
+    }
+
+    .bibtex-container pre {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 16px;
+      line-height: 1.1;
+    }
+
+    .bibtex-container code {
+      background: transparent;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    /* Dark theme support */
+    @media (prefers-color-scheme: dark) {
+      .bibtex-container {
+        background-color: #2d3748;
+        border-color: #4a5568;
+      }
+
+      .bibtex-entry-type {
+        color: #F84E4E;
+      }
+
+      .bibtex-id {
+        color: #EDEDED;
+        font-weight: normal;
+      }
+
+      .bibtex-field-name {
+        color: #008EA7;
+      }
+
+      .bibtex-field-value {
+        color: #FA8D50;
+      }
+
+      .bibtex-braces,
+      .bibtex-equals,
+      .bibtex-comma {
+        color: #a0aec0;
+      }
+
+      .copy-button {
+        background: #0056b3;
+      }
+
+      .copy-button:hover {
+        background: #007bff;
+      }
+
+      .copy-button.copied {
+        background: #28a745;
+      }
+    }
+
+    /* Custom styles for TopK content */
+    .topk-highlight {
+      color: #3273dc;
+      font-weight: bold;
+    }
+
+    /* Responsive image styles */
+    .responsive-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* PC size - use full container width */
+    @media screen and (min-width: 769px) {
+      .architecture-image {
+        width: 100% !important;
+        max-width: 800px !important;
+        height: auto;
+      }
+      
+      .favicon-logo {
+        max-width: 150px;
+      }
+    }
+
+    /* Mobile responsive adjustments */
+    @media screen and (max-width: 768px) {
+      .responsive-image {
+        max-width: 100%;
+        width: auto;
+      }
+      
+      .architecture-image {
+        max-width: 100% !important;
+        width: auto !important;
+      }
+      
+      .favicon-logo {
+        max-width: 120px;
+      }
+    }
+
+    
+  </style>
+
+
+</head>
+<body>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-fullhd">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <img src="./static/images/favicon.svg" alt="TopK LM Logo" class="responsive-image favicon-logo" style="margin-bottom: 20px;">
+          <h1 class="title is-1 publication-title">TopK Language Models</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://r-takahashi.webflow.io/">Ryosuke Takahashi</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="https://tatsuropfgt.github.io/">Tatsuro Inaba</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://kentaro-inui.github.io/">Kentaro Inui</a><sup>3,1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://bheinzerling.github.io/">Benjamin Heinzerling</a><sup>2,1</sup>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Tohoku University,</span>
+            <span class="author-block"><sup>2</sup>RIKEN,</span>
+            <span class="author-block"><sup>3</sup>MBZUAI</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2506.21468v1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2506.21468v1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/r-takahashi-h12/topklm"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Hugging Face Link. -->
+              <!-- <span class="link-block">
+                <a href="https://huggingface.co/spaces/r-takahashi-h12/topklm"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <img src="./static/images/hf_icon.svg" alt="Hugging Face" width="18" height="18">
+                  </span>
+                  <span>Hugging Face</span>
+                  </a>
+              </span> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Abstract. -->
+<section class="hero is-light is-small" style="padding: 60px 0;">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">TL;DR</h2>
+        <div class="content has-text-justified">
+          <p class="is-size-5 has-text-weight-semibold has-text-centered" style="padding: 15px; margin-bottom: 30px;">
+            We replace the activation function in Transformer-based LMs with the TopK function, <br>resulting in SAE-like highly interpretable sparse activations.
+          </p>
+          
+          <h3 class="title is-4">Why Sparsely-activated LMs?</h3>
+          <p>
+            Sparse Autoencoders (SAEs) are one of go-to tools for interpreting the hidden states of LMs, since their sparse activations often (but not always) exhibit interpretable patterns. However, SAEs are trained post-hoc, which comes with several drawbacks such as additional training cost, inconsistency of learned SAE features across random seeds, and the possibility that SAEs do not learn all features represented in the underlying LM.
+          </p>
+          <p>
+            That's where we asked: <strong>Why don't we just put the SAE into the LM right from the start?</strong> By replacing the LM's original activation function with the TopK activation function popularized by SAEs, we get a new LM architecture that <strong>combines the performance benefits of transformer-based LMs with the interpretability advantages of sparse autoencoders, without requiring post-hoc training</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-fullhd">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Architecture</h2>
+          <div class="content">
+            <div class="has-text-centered" style="margin-bottom: 30px;">
+              <img src="./static/images/topklm.gif" alt="TopKLM Architecture" class="responsive-image architecture-image">
+            </div>
+            
+            <div class="content has-text-left" style="max-width: 800px; margin: 0 auto;">
+              <ul class="is-size-5">
+                <li><strong>Early and Middle Layers</strong>: Apply TopK activation to create sparse, interpretable representations</li>
+                <li><strong>Final Layers</strong>: Maintain dense processing to preserve model expressivity and performance</li>
+              </ul>
+              
+              <p class="has-text-justified" style="margin-top: 30px;">
+                The architecture integrates <strong>TopK activation functions in selected layers</strong> to achieve sparse activation patterns while maintaining model expressivity. The key insight is to apply sparsity selectively - using TopK activation in early layers for interpretability, while keeping final layers dense for performance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+</section>
+
+<!-- Interpretability Advantages -->
+<section class="hero" style="padding: 60px 0;">
+  <div class="container is-max-fullhd">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Interpretability Advantages</h2>
+        <div class="content">
+          <div class="has-text-centered" style="margin-bottom: 30px;">
+            <img src="./static/images/overview.png" alt="TopK LM Overview" class="responsive-image">
+          </div>
+          
+          <div class="content has-text-left" style="max-width: 800px; margin: 0 auto;">
+            <p class="has-text-justified" style="margin-bottom: 30px;">
+              TopK LMs enjoy <strong>SAE-like interpretability</strong> with three key benefits:
+            </p>
+            
+            <ol class="is-size-5">
+              <li style="margin-bottom: 15px;"><strong>Improved Neuron Interpretability</strong>: Individual neurons can be clearly interpreted as representing specific concepts (e.g., "Work")</li>
+              <li style="margin-bottom: 15px;"><strong>Concept Steering</strong>: Single-neuron interventions can steer text output towards specific concepts (e.g., steering towards "work" concepts)</li>
+              <li style="margin-bottom: 15px;"><strong>Traceability of Neuron Specialization</strong>: The formation of specialized neurons can be traced across training checkpoints and across different layers</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- BibTeX -->
+<section class="hero is-light is-small" id="BibTeX">
+  <div class="hero-body">
+    <div class="container is-max-fullhd">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths content has-text-centered">
+          <h2 class="title">BibTeX</h2>
+          <div class="bibtex-container" id="bibtex1">
+            <button class="copy-button" onclick="copyBibtex('bibtex1')">
+              <i class="fas fa-copy"></i>
+              <span class="copy-text">Copy</span>
+            </button>
+            <pre>
+              <code>
+<span class="bibtex-entry-type">@article</span><span class="bibtex-braces">{</span><span class="bibtex-id">takahashi-2025-topklm</span><span class="bibtex-comma">,</span><br>
+&nbsp;&nbsp;<span class="bibtex-field-name">author</span> <span class="bibtex-equals">=</span> <span class="bibtex-braces">{</span><span class="bibtex-field-value">Takahashi, Ryosuke and Inaba, Tatsuro and Inui, Kentaro and Heinzerling, Benjamin</span><span class="bibtex-braces">}</span><span class="bibtex-comma">,</span><br>
+&nbsp;&nbsp;<span class="bibtex-field-name">title</span> <span class="bibtex-equals">=</span> <span class="bibtex-braces">{</span><span class="bibtex-field-value">TopK Language Models</span><span class="bibtex-braces">}</span><span class="bibtex-comma">,</span><br>
+&nbsp;&nbsp;<span class="bibtex-field-name">year</span> <span class="bibtex-equals">=</span> <span class="bibtex-braces">{</span><span class="bibtex-field-value">2025</span><span class="bibtex-braces">}</span><span class="bibtex-comma">,</span><br>
+&nbsp;&nbsp;<span class="bibtex-field-name">journal</span> <span class="bibtex-equals">=</span> <span class="bibtex-braces">{</span><span class="bibtex-field-value">arXiv [cs.CL]</span><span class="bibtex-braces">}</span><span class="bibtex-comma">,</span><br>
+&nbsp;&nbsp;<span class="bibtex-field-name">url</span> <span class="bibtex-equals">=</span> <span class="bibtex-braces">{</span><span class="bibtex-field-value">https://arxiv.org/abs/2506.21468v1</span><span class="bibtex-braces">}</span><br>
+<span class="bibtex-braces">}</span>
+              </code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer has-background-light">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This webpage template is from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
